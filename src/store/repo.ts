@@ -1,52 +1,56 @@
 // Utilities
-import {
+import { defineStore } from 'pinia'
+import type { Ref } from 'vue'
+import { computed, ref } from 'vue'
+import type {
   Package,
   PackageIndex,
   PackageVersion,
   Repo,
   RepoIndex,
-} from "@/types/package";
-import { getLatestVersion } from "@/utils/vpm";
-import { defineStore } from "pinia";
-import { Ref, computed, ref } from "vue";
+} from '@/types/package'
+import { getLatestVersion } from '@/utils/vpm'
 
-export const useRepoStore = defineStore("repo", () => {
-  const sourceRepo: Ref<null | Repo> = ref(null);
+export const useRepoStore = defineStore('repo', () => {
+  const sourceRepo: Ref<null | Repo> = ref(null)
   const repo = computed(() => {
-    if (sourceRepo.value === null) return null;
+    if (sourceRepo.value === null)
+      return null
 
     const tempRepo = {
       name: sourceRepo.value.name,
       author: sourceRepo.value.author,
       url: sourceRepo.value.url,
       packages: [],
-    } as RepoIndex;
+    } as RepoIndex
 
-    const packageIds = Object.keys(sourceRepo.value.packages);
+    const packageIds = Object.keys(sourceRepo.value.packages)
     packageIds.forEach((id) => {
-      const sourcePackage = sourceRepo.value?.packages[id];
-      if (sourcePackage === undefined) return;
+      const sourcePackage = sourceRepo.value?.packages[id]
+      if (sourcePackage === undefined)
+        return
 
       tempRepo.packages.push({
         latest: getLatestVersion(sourcePackage as Package) as PackageVersion,
         versions: sourcePackage.versions,
-      });
-    });
+      })
+    })
 
-    return tempRepo;
-  });
+    return tempRepo
+  })
 
   async function updateRepo(): Promise<Repo> {
-    const response = await fetch("/index.json");
-    const responseRepo = (await response.json()) as Repo;
-    if (responseRepo !== null) sourceRepo.value = responseRepo;
+    const response = await fetch('/index.json')
+    const responseRepo = (await response.json()) as Repo
+    if (responseRepo !== null)
+      sourceRepo.value = responseRepo
 
-    return responseRepo;
+    return responseRepo
   }
 
   function getPackage(id: string): PackageIndex | undefined {
-    return repo.value?.packages.find((pack) => pack.latest.name === id);
+    return repo.value?.packages.find(pack => pack.latest.name === id)
   }
 
-  return { sourceRepo, repo, updateRepo, getPackage };
-});
+  return { sourceRepo, repo, updateRepo, getPackage }
+})
