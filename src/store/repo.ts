@@ -39,6 +39,8 @@ export const useRepoStore = defineStore('repo', () => {
     return tempRepo
   })
 
+  const hasData = computed(() => sourceRepo.value !== null)
+
   async function updateRepo(): Promise<Repo> {
     const response = await fetch('/index.json')
     const responseRepo = (await response.json()) as Repo
@@ -52,5 +54,5 @@ export const useRepoStore = defineStore('repo', () => {
     return repo.value?.packages.find(pack => pack.latest.name === id)
   }
 
-  return { sourceRepo, repo, updateRepo, getPackage }
+  return { sourceRepo, repo, hasData, updateRepo, getPackage }
 })

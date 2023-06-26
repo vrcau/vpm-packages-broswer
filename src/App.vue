@@ -3,10 +3,7 @@ import { onMounted } from 'vue'
 import { useRepoStore } from './store/repo'
 
 const repoStore = useRepoStore()
-
-onMounted(async () => {
-  await repoStore.updateRepo()
-})
+onMounted(async () => await repoStore.updateRepo())
 </script>
 
 <template>
@@ -46,6 +43,7 @@ onMounted(async () => {
         </v-list>
       </v-navigation-drawer>
       <v-main>
+        <v-progress-linear v-if="!repoStore.hasData" indeterminate color="primary" />
         <RouterView />
       </v-main>
     </v-layout>

@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { Ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRepoStore } from '@/store/repo'
+import type { PackageIndex } from '@/types/package'
 
 const props = defineProps<{
   id: string
 }>()
 
 const repoStore = useRepoStore()
-const pack = repoStore.getPackage(props.id)
+
+const pack: Ref<PackageIndex | undefined> = ref(undefined)
+if (repoStore.hasData)
+  pack.value = repoStore.getPackage(props.id)
+
+watch(() => repoStore.hasData, (hasData) => {
+  if (hasData)
+    pack.value = repoStore.getPackage(props.id)
+})
 
 const selectedNavigationItem = ref([0])
 </script>
