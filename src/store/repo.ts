@@ -42,7 +42,7 @@ export const useRepoStore = defineStore('repo', () => {
   const hasData = computed(() => sourceRepo.value !== null)
 
   async function updateRepo(): Promise<Repo> {
-    const response = await fetch('/index.json')
+    const response = await fetch('https://pkg-index.yuxiaviation.com/index.json')
     const responseRepo = (await response.json()) as Repo
     if (responseRepo !== null)
       sourceRepo.value = responseRepo

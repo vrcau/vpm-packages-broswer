@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    InstallGuide: typeof import('./components/InstallGuide.vue')['default']
     PackageVersionInfo: typeof import('./components/PackageVersionInfo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

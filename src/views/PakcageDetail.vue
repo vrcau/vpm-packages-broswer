@@ -33,9 +33,19 @@ const selectedNavigationItem = ref([0])
           {{ pack?.latest.displayName }}
         </div>
       </div>
-      <v-btn :rounded="false" size="x-large" variant="flat" color="primary" class="mx-6" prepend-icon="mdi-download">
-        Install
-      </v-btn>
+
+      <v-dialog v-if="repoStore.sourceRepo?.url !== undefined && pack?.latest !== undefined" width="auto">
+        <template #activator="slotProps">
+          <v-btn
+            v-bind="slotProps.props"
+            :rounded="false" size="x-large" variant="flat" color="primary"
+            class="mx-6" prepend-icon="mdi-download"
+          >
+            Install
+          </v-btn>
+        </template>
+        <InstallGuide :repo-url="repoStore.sourceRepo?.url" :pack="pack" />
+      </v-dialog>
     </v-sheet>
   </div>
   <v-layout full-height>
