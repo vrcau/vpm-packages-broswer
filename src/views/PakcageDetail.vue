@@ -55,8 +55,6 @@ const selectedNavigationItem = ref([0])
           <v-card>
             <v-card-title>Description</v-card-title>
             <v-card-text>{{ pack?.latest.description }}</v-card-text>
-          </v-card>
-          <v-card class="mt-3">
             <v-card-title>
               Latest Version
               <v-chip class="ml-2" color="primary" variant="elevated">
@@ -64,18 +62,18 @@ const selectedNavigationItem = ref([0])
               </v-chip>
             </v-card-title>
             <v-card-text>{{ pack?.latest.description }}</v-card-text>
-          </v-card>
-          <v-card v-if="pack?.latest.vpmDependencies !== undefined" class="mt-3">
-            <v-card-title>VPM Dependencies</v-card-title>
-            <v-card-text>
+            <v-card-title v-if="pack?.latest.vpmDependencies !== undefined">
+              VPM Dependencies
+            </v-card-title>
+            <v-card-text v-if="pack?.latest.vpmDependencies !== undefined">
               <p v-for="dependency in Object.keys(pack.latest.vpmDependencies)" :key="dependency">
                 {{ dependency }} - {{ pack.latest.vpmDependencies[dependency] }}
               </p>
             </v-card-text>
-          </v-card>
-          <v-card v-if="pack?.latest.gitDependencies !== undefined" class="mt-3">
-            <v-card-title>Git Dependencies</v-card-title>
-            <v-card-text>
+            <v-card-title v-if="pack?.latest.gitDependencies !== undefined">
+              Git Dependencies
+            </v-card-title>
+            <v-card-text v-if="pack?.latest.gitDependencies !== undefined">
               <div
                 v-for="dependency in Object.keys(pack.latest.gitDependencies)" :key="dependency"
               >
@@ -86,32 +84,7 @@ const selectedNavigationItem = ref([0])
           </v-card>
         </v-window-item>
         <v-window-item>
-          <v-card v-for="version in pack?.versions" :key="version.version" class="mb-2">
-            <v-card-title>
-              v{{ version.version }}
-              <v-chip v-if="version.version === pack?.latest.version" color="primary" variant="elevated" class="ml-2">
-                Latest
-              </v-chip>
-            </v-card-title>
-            <v-card-text>
-              {{ version.description }}
-            </v-card-text>
-            <v-card-title>VPM Dependencies</v-card-title>
-            <v-card-text v-if="version.vpmDependencies !== undefined">
-              <p v-for="dependency in Object.keys(version.vpmDependencies)" :key="dependency">
-                {{ dependency }} - {{ version.vpmDependencies[dependency] }}
-              </p>
-            </v-card-text>
-            <v-card-title>Git Dependencies</v-card-title>
-            <v-card-text v-if="version.gitDependencies !== undefined">
-              <div
-                v-for="dependency in Object.keys(version.gitDependencies)" :key="dependency"
-              >
-                <p>{{ dependency }}:</p>
-                <v-code>{{ version.gitDependencies[dependency] }}</v-code>
-              </div>
-            </v-card-text>
-          </v-card>
+          <PackageVersionInfo v-for="version in pack?.versions" :key="version.version" :version="version" :latest-version="pack?.latest.version" />
         </v-window-item>
       </v-window>
     </v-main>

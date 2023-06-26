@@ -8,8 +8,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "files.associations": {
-    "*.css": "postcss"
-  },
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
