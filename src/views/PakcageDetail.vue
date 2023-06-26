@@ -29,7 +29,7 @@ const selectedNavigationItem = ref([0])
     </v-sheet>
   </div>
   <v-layout full-height>
-    <v-navigation-drawer location="right" permanent color="transparent">
+    <v-navigation-drawer location="right" permanent color="transparent" width="200">
       <v-list v-model:selected="selectedNavigationItem" mandatory nav density="compact">
         <v-list-item :value="0" prepend-icon="mdi-information-outline">
           About
