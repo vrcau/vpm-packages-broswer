@@ -110,7 +110,7 @@ const selectedNavigationItem = ref([0])
 
 <style scoped>
 .package-detail-banner {
-  background-image: url("/v320neo.png");
+  background-image: url("/v320neo.webp");
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: cover;
