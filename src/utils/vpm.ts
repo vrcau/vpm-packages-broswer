@@ -5,5 +5,5 @@ export function getLatestVersion(pack: Package) {
   if (versions.length === 0)
     return null
 
-  return pack.versions[versions.at(-1) as string]
+  return pack.versions[versions.sort().at(-1) as string]
 }

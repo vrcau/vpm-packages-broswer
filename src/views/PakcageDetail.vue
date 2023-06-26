@@ -6,55 +6,119 @@ const props = defineProps<{
   id: string
 }>()
 
-const selectedVersion = ref('')
-
 const repoStore = useRepoStore()
 const pack = repoStore.getPackage(props.id)
+
+const selectedNavigationItem = ref([0])
 </script>
 
 <template>
-  <div class="package-detail-header">
-    <div class="package-detail-header-title">
-      <div class="text-caption">
-        {{ pack?.latest.name }}
+  <div class="package-detail-banner">
+    <v-sheet rounded="t-xl" class="pa-3 px-6 d-flex align-center">
+      <div>
+        <div class="text-caption">
+          {{ pack?.latest.name }}
+        </div>
+        <div class="text-h3">
+          {{ pack?.latest.displayName }}
+        </div>
       </div>
-      <div class="text-h3">
-        {{ pack?.latest.displayName }}
-      </div>
-    </div>
+      <v-btn :rounded="false" size="x-large" variant="flat" color="primary" class="mx-6" prepend-icon="mdi-download">
+        Install
+      </v-btn>
+    </v-sheet>
   </div>
-  <div class="ma-5">
-    <div class="text-h4">
-      Available Versions
-    </div>
-    <v-tabs v-model="selectedVersion">
-      <v-tab v-for="version in pack?.versions" :key="version.version" :value="version.version">
-        release {{ version.version }}
-      </v-tab>
-    </v-tabs>
-
-    <div class="text-h5 mt-3">
-      Release v0.0.1
-    </div>
-    <div>反正就是一大堆更新日志</div>
-  </div>
+  <v-layout full-height>
+    <v-navigation-drawer location="right" permanent color="transparent">
+      <v-list v-model:selected="selectedNavigationItem" mandatory nav density="compact">
+        <v-list-item :value="0" prepend-icon="mdi-information-outline">
+          About
+        </v-list-item>
+        <v-list-item :value="1" prepend-icon="mdi-note-text-outline">
+          Releases
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-main scrollable style="height: 50vh;">
+      <v-window v-model="selectedNavigationItem" direction="vertical" class="pa-5 overflow-y-auto">
+        <v-window-item>
+          <v-card>
+            <v-card-title>Description</v-card-title>
+            <v-card-text>{{ pack?.latest.description }}</v-card-text>
+          </v-card>
+          <v-card class="mt-3">
+            <v-card-title>
+              Latest Version
+              <v-chip class="ml-2" color="primary" variant="elevated">
+                Release v{{ pack?.latest.version }}
+              </v-chip>
+            </v-card-title>
+            <v-card-text>{{ pack?.latest.description }}</v-card-text>
+          </v-card>
+          <v-card v-if="pack?.latest.vpmDependencies !== undefined" class="mt-3">
+            <v-card-title>VPM Dependencies</v-card-title>
+            <v-card-text>
+              <p v-for="dependency in Object.keys(pack.latest.vpmDependencies)" :key="dependency">
+                {{ dependency }} - {{ pack.latest.vpmDependencies[dependency] }}
+              </p>
+            </v-card-text>
+          </v-card>
+          <v-card v-if="pack?.latest.gitDependencies !== undefined" class="mt-3">
+            <v-card-title>Git Dependencies</v-card-title>
+            <v-card-text>
+              <div
+                v-for="dependency in Object.keys(pack.latest.gitDependencies)" :key="dependency"
+              >
+                <p>{{ dependency }}:</p>
+                <v-code>{{ pack.latest.gitDependencies[dependency] }}</v-code>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-window-item>
+        <v-window-item>
+          <v-card v-for="version in pack?.versions" :key="version.version" class="mb-2">
+            <v-card-title>
+              v{{ version.version }}
+              <v-chip v-if="version.version === pack?.latest.version" color="primary" variant="elevated" class="ml-2">
+                Latest
+              </v-chip>
+            </v-card-title>
+            <v-card-text>
+              {{ version.description }}
+            </v-card-text>
+            <v-card-title>VPM Dependencies</v-card-title>
+            <v-card-text v-if="version.vpmDependencies !== undefined">
+              <p v-for="dependency in Object.keys(version.vpmDependencies)" :key="dependency">
+                {{ dependency }} - {{ version.vpmDependencies[dependency] }}
+              </p>
+            </v-card-text>
+            <v-card-title>Git Dependencies</v-card-title>
+            <v-card-text v-if="version.gitDependencies !== undefined">
+              <div
+                v-for="dependency in Object.keys(version.gitDependencies)" :key="dependency"
+              >
+                <p>{{ dependency }}:</p>
+                <v-code>{{ version.gitDependencies[dependency] }}</v-code>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-window-item>
+      </v-window>
+    </v-main>
+  </v-layout>
 </template>
 
 <style scoped>
-.package-detail-header {
+.package-detail-banner {
   background-image: url("/v320neo.png");
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: cover;
   min-height: 340px;
+  height: 50vh;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-}
-
-.package-detail-header-title {
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  padding: 1rem;
 }
 </style>
