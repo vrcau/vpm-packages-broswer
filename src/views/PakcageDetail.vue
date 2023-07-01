@@ -19,6 +19,10 @@ watch(() => repoStore.hasData, (hasData) => {
     pack.value = repoStore.getPackage(props.id)
 })
 
+watch(() => props.id, (id) => {
+  pack.value = repoStore.getPackage(id)
+})
+
 const selectedNavigationItem = ref([0])
 </script>
 
@@ -105,7 +109,7 @@ const selectedNavigationItem = ref([0])
 .package-detail-banner {
   background-image: url("/v320neo.webp");
   background-repeat: no-repeat;
-  background-position: center bottom;
+  background-position: center;
   background-size: cover;
   min-height: 340px;
   height: 50vh;

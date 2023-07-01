@@ -50,8 +50,8 @@ const selectedVersion = ref(props.pack.latest.version)
               <p class="text-body-2">
                 Click <strong><code>Manage Project</code></strong> on your project and select <strong><code>{{ pack.latest.version }}</code></strong> or any version you want to install
               </p>
-              <v-img src="/src/assets/install-guide-vcc-1.webp" />
-              <v-img src="/src/assets/install-guide-vcc-2.webp" />
+              <v-img src="/install-guide-vcc-1.webp" />
+              <v-img src="/install-guide-vcc-2.webp" />
             </div>
           </v-timeline-item>
         </v-timeline>
